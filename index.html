@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>トークテーマ30 スマホ版</title>
+<style>
+:root{
+  --bg1:#fff7fb; --bg2:#f3efff; --main:#8f64ff; --pink:#ff6fb1; --blue:#62b6ff; --text:#2d2440;
+  --used:#eeeaf5; --card:#ffffff; --line:#eadff5; --shadow:rgba(76,58,120,.14);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{margin:0; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif; color:var(--text); background:radial-gradient(circle at 20% 0%,#ffe1f0 0,transparent 34%),radial-gradient(circle at 90% 16%,#dfe3ff 0,transparent 28%),linear-gradient(160deg,var(--bg1),var(--bg2));}
+.wrap{max-width:760px; margin:0 auto; padding:14px 12px 36px;}
+header{background:rgba(255,255,255,.86); border:2px solid #fff; border-radius:22px; padding:14px 12px; box-shadow:0 8px 22px rgba(116,80,170,.12); text-align:center; position:sticky; top:8px; z-index:10; backdrop-filter:blur(10px);}
+h1{font-size:25px; margin:0 0 4px; letter-spacing:.03em; color:var(--main); text-shadow:2px 2px 0 #fff; line-height:1.2;}
+.sub{font-size:12px; opacity:.78; font-weight:700;}
+.controls{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px;}
+button{border:0; border-radius:15px; padding:12px 8px; font-size:14px; font-weight:900; color:#fff; box-shadow:0 5px 0 rgba(69,43,110,.2),0 8px 18px rgba(116,80,170,.15); touch-action:manipulation;}
+button:active{transform:translateY(3px); box-shadow:0 2px 0 rgba(69,43,110,.18);}
+.btn-shuffle{background:linear-gradient(135deg,#b56cff,#7e61ff);}
+.btn-random{background:linear-gradient(135deg,#ff8bc2,#ff5e9f);}
+.btn-reset{background:linear-gradient(135deg,#59c6ff,#4b93ff);}
+.panel{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-top:14px;}
+.card{aspect-ratio:1/1.12; border-radius:18px; background:var(--card); border:2px solid #fff; box-shadow:0 5px 16px var(--shadow); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-weight:900; position:relative; overflow:hidden; transition:.12s transform,.12s filter,.12s opacity;}
+.card::before{content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,112,177,.10),rgba(126,97,255,.10)); opacity:.9;}
+.card::after{content:""; position:absolute; width:58px; height:58px; right:-23px; bottom:-23px; border-radius:50%; background:rgba(255,255,255,.72);}
+.icon{position:relative; z-index:1; font-size:18px; line-height:1; filter:drop-shadow(0 1px 0 #fff);}
+.num{position:relative; z-index:1; font-size:22px; color:#fff; width:45px; height:45px; display:grid; place-items:center; border-radius:16px; background:var(--num-bg,linear-gradient(135deg,var(--pink),var(--main))); text-shadow:0 1px 2px rgba(0,0,0,.22); box-shadow:inset 0 -3px 0 rgba(0,0,0,.10),0 4px 10px rgba(70,40,110,.14);}
+.status{position:relative; z-index:1; min-height:17px; font-size:18px; line-height:1; color:#31b871; text-shadow:0 1px 0 #fff;}
+.card.used{background:var(--used); opacity:.78;}
+.card.used::before{background:linear-gradient(135deg,rgba(180,174,195,.24),rgba(150,142,170,.20));}
+.card.used .num{filter:saturate(.55); opacity:.78;}
+.card.active{outline:4px solid rgba(255,111,177,.35); transform:scale(.98);}
+.note{margin:12px 2px 0; font-size:12px; line-height:1.6; opacity:.75; text-align:center; font-weight:700;}
+.editor{margin-top:18px; background:rgba(255,255,255,.80); border:2px solid #fff; border-radius:20px; padding:12px; box-shadow:0 8px 22px rgba(116,80,170,.1);}
+.editor summary{font-weight:900; color:var(--main); cursor:pointer; padding:4px;}
+.field{margin-top:10px;}
+label{display:block; font-size:12px; font-weight:900; color:#6b5791; margin:0 0 6px 3px;}
+input[type="text"]{width:100%; border:2px solid var(--line); border-radius:14px; padding:12px; font-size:16px; font-weight:800; font-family:inherit; background:#fff; color:var(--text);}
+textarea{width:100%; min-height:260px; resize:vertical; border:2px solid var(--line); border-radius:16px; padding:12px; font-size:14px; line-height:1.55; font-family:inherit; background:#fff; color:var(--text);}
+.editorBtns{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:8px;}
+.btn-save{background:linear-gradient(135deg,#7bd88f,#2fbf71);}
+.btn-default{background:linear-gradient(135deg,#ffbd66,#ff8b4a);}
+.overlay{position:fixed; inset:0; background:rgba(38,22,61,.45); display:none; align-items:center; justify-content:center; z-index:100; padding:18px;}
+.overlay.show{display:flex;}
+.modal{width:min(92vw,520px); background:#fff; border-radius:28px; padding:22px 18px 18px; text-align:center; border:4px solid #fff; box-shadow:0 20px 50px rgba(46,28,74,.28); animation:pop .22s ease-out;}
+@keyframes pop{from{transform:scale(.88); opacity:.2;}to{transform:scale(1); opacity:1;}}
+.modalLabel{display:inline-block; background:linear-gradient(135deg,#ff74b4,#8f64ff); color:#fff; font-weight:900; padding:8px 18px; border-radius:999px; font-size:15px; margin-bottom:12px;}
+.modalIcon{font-size:34px; margin-bottom:4px;}
+.modalNum{font-size:20px; color:var(--main); font-weight:900; margin-bottom:6px;}
+.modalTheme{font-size:28px; line-height:1.35; font-weight:1000; color:#211936; word-break:keep-all; overflow-wrap:anywhere; min-height:78px; display:flex; align-items:center; justify-content:center;}
+.wait{font-size:12px; color:#8a7a9f; font-weight:800; margin:14px 0 0;}
+.modalBtns{display:none; grid-template-columns:1fr 1fr; gap:8px; margin-top:18px;}
+.modalBtns.show{display:grid;}
+.btn-close{background:linear-gradient(135deg,#8f64ff,#6654e8);}
+.btn-again{background:linear-gradient(135deg,#ff8bc2,#ff5e9f);}
+.small{font-size:11px; opacity:.7; margin-top:10px; font-weight:700; line-height:1.5;}
+@media(max-width:390px){.panel{gap:6px}.card{border-radius:15px}.num{font-size:19px; width:38px; height:38px}.icon{font-size:16px}.status{font-size:16px; min-height:15px}h1{font-size:22px}.modalTheme{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="mainTitle">トークテーマ30</h1>
+    <div class="sub">スマホ単体版｜番号をタップしてテーマ表示</div>
+    <div class="controls">
+      <button class="btn-shuffle" onclick="shuffleAll()">シャッフル</button>
+      <button class="btn-random" onclick="randomPick()">ランダム</button>
+      <button class="btn-reset" onclick="resetUsed()">リセット</button>
+    </div>
+  </header>
+
+  <div id="panel" class="panel"></div>
+  <div class="note">未使用は番号だけ表示。使用したパネルは✅になります。テーマ表示後、3秒で「収納する」ボタンが出ます。</div>
+
+  <details class="editor">
+    <summary>タイトル・テーマ編集</summary>
+    <div class="field">
+      <label for="titleText">タイトル</label>
+      <input id="titleText" type="text" maxlength="30" placeholder="トークテーマ30" />
+    </div>
+    <div class="field">
+      <label for="themeText">テーマ一覧</label>
+      <textarea id="themeText"></textarea>
+    </div>
+    <div class="editorBtns">
+      <button class="btn-save" onclick="saveSettings()">保存</button>
+      <button class="btn-default" onclick="restoreDefault()">初期に戻す</button>
+    </div>
+    <div class="small">タイトルとテーマはスマホ内に保存されます。テーマは1行につき1つ、30行まで使います。</div>
+  </details>
+</div>
+
+<div id="overlay" class="overlay">
+  <div class="modal">
+    <div class="modalLabel">今回のテーマ</div>
+    <div id="modalIcon" class="modalIcon"></div>
+    <div id="modalNum" class="modalNum"></div>
+    <div id="modalTheme" class="modalTheme"></div>
+    <div id="wait" class="wait">3秒後に収納ボタンが出ます</div>
+    <div id="modalBtns" class="modalBtns">
+      <button class="btn-close" onclick="closeModal()">収納する</button>
+      <button class="btn-again" onclick="showButtonsNow()">表示したまま</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_TITLE = 'トークテーマ30';
+const DEFAULT_THEMES = [
+"朝のルーティンについて",
+"読んで影響を受けた本",
+"特技や趣味、創作活動",
+"好きな季節とその理由",
+"推しの魅力について語る",
+"印象に残っている配信の瞬間",
+"写真を撮る時のこだわり",
+"健康のために気をつけていること",
+"旅行先での忘れられない体験",
+"密かに抱いている野望",
+"作業部屋のこだわりポイント",
+"最近お祝いした嬉しいこと",
+"コメント欄で驚いたこと",
+"作ってみたい理想の料理",
+"尊敬している配信者先輩",
+"お気に入りの映画・ドラマ",
+"時間があったらやりたいこと",
+"衝動買いした面白いもの",
+"学校での懐かしい思い出",
+"もし一日だけ違う自分になれたら",
+"自分だけの小さなこだわり",
+"宝物にしているもの",
+"配信を通して成長したこと",
+"これから身に付けたい習慣",
+"リスナーさんにプレゼントしたいもの",
+"今後挑戦してみたい新しい企画",
+"夢中になれるリフレッシュ方法",
+"音楽の好みや思い出の曲",
+"理想の家や住みたい場所",
+"リスナーさんへ伝えたい一言"
+];
+const ICONS = ['☀️','📚','🎨','🌸','💖','🎥','📷','💪','✈️','🔥','🛋️','🎉','💬','🍳','⭐','🎬','⏰','🛍️','🏫','✨','🔎','💎','📈','🌱','🎁','🚀','🍵','🎵','🏠','📣'];
+const COLORS = [
+  'linear-gradient(135deg,#ff6b9d,#ff3d71)',
+  'linear-gradient(135deg,#ff9f43,#ff6b00)',
+  'linear-gradient(135deg,#ffd93d,#ffb703)',
+  'linear-gradient(135deg,#6bde8a,#24b86a)',
+  'linear-gradient(135deg,#4dd4ff,#0096ff)',
+  'linear-gradient(135deg,#6c7bff,#4654e8)',
+  'linear-gradient(135deg,#b56cff,#7e61ff)',
+  'linear-gradient(135deg,#ff75d8,#d84fff)',
+  'linear-gradient(135deg,#ff8c69,#ff5252)',
+  'linear-gradient(135deg,#35d0ba,#00a896)'
+];
+let title = DEFAULT_TITLE;
+let themes = [];
+let order = [];
+let used = [];
+let currentPos = null;
+let timer = null;
+
+function safeJson(key, fallback){
+  try{return JSON.parse(localStorage.getItem(key) || 'null') || fallback;}catch(e){return fallback;}
+}
+function load(){
+  title = localStorage.getItem('tt30_title') || DEFAULT_TITLE;
+  themes = safeJson('tt30_themes', DEFAULT_THEMES.slice());
+  themes = themes.concat(DEFAULT_THEMES).slice(0,30);
+  order = safeJson('tt30_order', [...Array(30).keys()]);
+  used = safeJson('tt30_used', Array(30).fill(false));
+  if(order.length !== 30) order = [...Array(30).keys()];
+  if(used.length !== 30) used = Array(30).fill(false);
+  document.getElementById('mainTitle').textContent = title;
+  document.getElementById('titleText').value = title;
+  document.getElementById('themeText').value = themes.join('\n');
+  render();
+}
+function persist(){
+  localStorage.setItem('tt30_title', title);
+  localStorage.setItem('tt30_themes', JSON.stringify(themes));
+  localStorage.setItem('tt30_order', JSON.stringify(order));
+  localStorage.setItem('tt30_used', JSON.stringify(used));
+}
+function render(){
+  const panel = document.getElementById('panel');
+  panel.innerHTML = '';
+  for(let pos=0; pos<30; pos++){
+    const card = document.createElement('div');
+    card.className = 'card' + (used[pos] ? ' used' : '') + (currentPos===pos ? ' active' : '');
+    card.onclick = () => openTheme(pos);
+    const idx = order[pos] ?? pos;
+    const bg = COLORS[pos % COLORS.length];
+    card.innerHTML = `<div class="icon">${ICONS[idx % ICONS.length]}</div><div class="num" style="--num-bg:${bg}">${String(pos+1).padStart(2,'0')}</div><div class="status">${used[pos]?'✅':''}</div>`;
+    panel.appendChild(card);
+  }
+}
+function openTheme(pos){
+  currentPos = pos;
+  used[pos] = true;
+  persist(); render();
+  const idx = order[pos] ?? pos;
+  const theme = themes[idx] || '未設定';
+  document.getElementById('modalIcon').textContent = ICONS[idx % ICONS.length];
+  document.getElementById('modalNum').textContent = `${String(pos+1).padStart(2,'0')}番`;
+  document.getElementById('modalTheme').textContent = theme;
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('wait').style.display = 'block';
+  document.getElementById('modalBtns').classList.remove('show');
+  clearTimeout(timer);
+  timer = setTimeout(showButtonsNow,3000);
+}
+function showButtonsNow(){
+  document.getElementById('wait').style.display = 'none';
+  document.getElementById('modalBtns').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('show');
+  currentPos = null;
+  clearTimeout(timer);
+  render();
+}
+function shuffleAll(){
+  if(!confirm('シャッフルして使用済みもリセットします。よろしいですか？')) return;
+  order = [...Array(30).keys()];
+  for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
+  used = Array(30).fill(false);
+  currentPos = null;
+  closeModal(); persist(); render();
+}
+function randomPick(){
+  const left = used.map((v,i)=>v?null:i).filter(v=>v!==null);
+  if(left.length===0){ alert('未使用のテーマがありません。リセットしてください。'); return; }
+  const pos = left[Math.floor(Math.random()*left.length)];
+  openTheme(pos);
+}
+function resetUsed(){
+  if(!confirm('使用済みを全部リセットします。よろしいですか？')) return;
+  used = Array(30).fill(false);
+  currentPos = null;
+  closeModal(); persist(); render();
+}
+function saveSettings(){
+  const newTitle = document.getElementById('titleText').value.trim() || DEFAULT_TITLE;
+  const lines = document.getElementById('themeText').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  if(lines.length < 1){ alert('テーマを1つ以上入力してください。'); return; }
+  title = newTitle;
+  themes = lines.concat(DEFAULT_THEMES).slice(0,30);
+  document.getElementById('mainTitle').textContent = title;
+  persist(); render(); alert('保存しました！');
+}
+function restoreDefault(){
+  if(!confirm('タイトルとテーマを初期内容に戻します。よろしいですか？')) return;
+  title = DEFAULT_TITLE;
+  themes = DEFAULT_THEMES.slice();
+  document.getElementById('mainTitle').textContent = title;
+  document.getElementById('titleText').value = title;
+  document.getElementById('themeText').value = themes.join('\n');
+  persist(); render();
+}
+load();
+</script>
+</body>
+</html>
