@@ -4,16 +4,21 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>トークテーマ30 スマホ版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg1:#fff7fb; --bg2:#f3efff; --main:#8f64ff; --pink:#ff6fb1; --blue:#62b6ff; --text:#2d2440;
   --used:#eeeaf5; --card:#ffffff; --line:#eadff5; --shadow:rgba(76,58,120,.14);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{margin:0; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif; color:var(--text); background:radial-gradient(circle at 20% 0%,#ffe1f0 0,transparent 34%),radial-gradient(circle at 90% 16%,#dfe3ff 0,transparent 28%),linear-gradient(160deg,var(--bg1),var(--bg2));}
+body{margin:0; min-height:100vh; font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif; color:var(--text); background:radial-gradient(circle at 20% 0%,#ffe1f0 0,transparent 34%),radial-gradient(circle at 90% 16%,#dfe3ff 0,transparent 28%),linear-gradient(160deg,var(--bg1),var(--bg2));}
 .wrap{max-width:760px; margin:0 auto; padding:14px 12px 36px;}
 header{background:rgba(255,255,255,.86); border:2px solid #fff; border-radius:22px; padding:14px 12px; box-shadow:0 8px 22px rgba(116,80,170,.12); text-align:center; position:sticky; top:8px; z-index:10; backdrop-filter:blur(10px);}
-h1{font-size:25px; margin:0 0 4px; letter-spacing:.03em; color:var(--main); text-shadow:2px 2px 0 #fff; line-height:1.2;}
+h1{font-size:24px; margin:0 0 4px; letter-spacing:.03em; color:var(--main); text-shadow:2px 2px 0 #fff; line-height:1.22; font-weight:900; white-space:normal;}
+.titleTop{display:block; color:#ff5e9f; font-size:.9em;}
+.titleBottom{display:block; color:#7e61ff; font-size:1.13em; margin-top:2px;}
 .sub{font-size:12px; opacity:.78; font-weight:700;}
 .controls{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px;}
 button{border:0; border-radius:15px; padding:12px 8px; font-size:14px; font-weight:900; color:#fff; box-shadow:0 5px 0 rgba(69,43,110,.2),0 8px 18px rgba(116,80,170,.15); touch-action:manipulation;}
@@ -22,13 +27,13 @@ button:active{transform:translateY(3px); box-shadow:0 2px 0 rgba(69,43,110,.18);
 .btn-random{background:linear-gradient(135deg,#ff8bc2,#ff5e9f);}
 .btn-reset{background:linear-gradient(135deg,#59c6ff,#4b93ff);}
 .panel{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-top:14px;}
-.card{aspect-ratio:1/1.12; border-radius:18px; background:var(--card); border:2px solid #fff; box-shadow:0 5px 16px var(--shadow); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-weight:900; position:relative; overflow:hidden; transition:.12s transform,.12s filter,.12s opacity;}
+.card{aspect-ratio:1/1.12; border-radius:18px; background:var(--card); border:2px solid #fff; box-shadow:0 5px 16px var(--shadow); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; font-weight:900; position:relative; overflow:hidden; transition:.12s transform,.12s filter,.12s opacity;}
 .card::before{content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,112,177,.10),rgba(126,97,255,.10)); opacity:.9;}
 .card::after{content:""; position:absolute; width:58px; height:58px; right:-23px; bottom:-23px; border-radius:50%; background:rgba(255,255,255,.72);}
 .icon{position:relative; z-index:1; font-size:18px; line-height:1; filter:drop-shadow(0 1px 0 #fff);}
-.num{position:relative; z-index:1; font-size:22px; color:#fff; width:45px; height:45px; display:grid; place-items:center; border-radius:16px; background:var(--num-bg,linear-gradient(135deg,var(--pink),var(--main))); text-shadow:0 1px 2px rgba(0,0,0,.22); box-shadow:inset 0 -3px 0 rgba(0,0,0,.10),0 4px 10px rgba(70,40,110,.14);}
-.status{position:relative; z-index:1; min-height:17px; font-size:18px; line-height:1; color:#31b871; text-shadow:0 1px 0 #fff;}
-.card.used{background:var(--used); opacity:.78;}
+.num{position:relative; z-index:1; font-size:27px; color:#fff; width:58px; height:58px; display:grid; place-items:center; border-radius:16px; background:var(--num-bg,linear-gradient(135deg,var(--pink),var(--main))); text-shadow:0 1px 2px rgba(0,0,0,.22); box-shadow:inset 0 -3px 0 rgba(0,0,0,.10),0 4px 10px rgba(70,40,110,.14);}
+.status{display:none;}
+.card.used{background:var(--used); opacity:.70;}
 .card.used::before{background:linear-gradient(135deg,rgba(180,174,195,.24),rgba(150,142,170,.20));}
 .card.used .num{filter:saturate(.55); opacity:.78;}
 .card.active{outline:4px solid rgba(255,111,177,.35); transform:scale(.98);}
@@ -56,7 +61,7 @@ textarea{width:100%; min-height:260px; resize:vertical; border:2px solid var(--l
 .btn-close{background:linear-gradient(135deg,#8f64ff,#6654e8);}
 .btn-again{background:linear-gradient(135deg,#ff8bc2,#ff5e9f);}
 .small{font-size:11px; opacity:.7; margin-top:10px; font-weight:700; line-height:1.5;}
-@media(max-width:390px){.panel{gap:6px}.card{border-radius:15px}.num{font-size:19px; width:38px; height:38px}.icon{font-size:16px}.status{font-size:16px; min-height:15px}h1{font-size:22px}.modalTheme{font-size:24px}}
+@media(max-width:390px){.panel{gap:6px}.card{border-radius:15px}.num{font-size:23px; width:48px; height:48px}.icon{display:none}.status{display:none}h1{font-size:21px}.modalTheme{font-size:24px}}
 </style>
 </head>
 <body>
@@ -72,13 +77,13 @@ textarea{width:100%; min-height:260px; resize:vertical; border:2px solid var(--l
   </header>
 
   <div id="panel" class="panel"></div>
-  <div class="note">未使用は番号だけ表示。使用したパネルは✅になります。テーマ表示後、3秒で「収納する」ボタンが出ます。</div>
+  <div class="note">使用済みは背景色が変わります。テーマ表示後、3秒で「収納する」ボタンが出ます。</div>
 
   <details class="editor">
     <summary>タイトル・テーマ編集</summary>
     <div class="field">
       <label for="titleText">タイトル</label>
-      <input id="titleText" type="text" maxlength="30" placeholder="トークテーマ30" />
+      <input id="titleText" type="text" maxlength="50" placeholder="トークテーマ30" />
     </div>
     <div class="field">
       <label for="themeText">テーマ一覧</label>
@@ -106,8 +111,10 @@ textarea{width:100%; min-height:260px; resize:vertical; border:2px solid var(--l
   </div>
 </div>
 
+<audio id="openSound" src="pon.mp3" preload="auto"></audio>
+
 <script>
-const DEFAULT_TITLE = 'トークテーマ30';
+const DEFAULT_TITLE = '💬 雑談ネタに困ったら！\n✨トークテーマ30✨';
 const DEFAULT_THEMES = [
 "朝のルーティンについて",
 "読んで影響を受けた本",
@@ -160,6 +167,27 @@ let used = [];
 let currentPos = null;
 let timer = null;
 
+function playOpenSound(){
+  const sound = document.getElementById('openSound');
+  if(!sound) return;
+  try{
+    sound.pause();
+    sound.currentTime = 0;
+    const p = sound.play();
+    if(p && typeof p.catch === 'function') p.catch(() => {});
+  }catch(e){}
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function setTitle(text){
+  const parts = String(text || DEFAULT_TITLE).split('\n');
+  const top = parts[0] || '';
+  const bottom = parts.slice(1).join(' ') || '';
+  document.getElementById('mainTitle').innerHTML = `<span class="titleTop">${escapeHtml(top)}</span>${bottom ? `<span class="titleBottom">${escapeHtml(bottom)}</span>` : ''}`;
+}
+
 function safeJson(key, fallback){
   try{return JSON.parse(localStorage.getItem(key) || 'null') || fallback;}catch(e){return fallback;}
 }
@@ -171,7 +199,7 @@ function load(){
   used = safeJson('tt30_used', Array(30).fill(false));
   if(order.length !== 30) order = [...Array(30).keys()];
   if(used.length !== 30) used = Array(30).fill(false);
-  document.getElementById('mainTitle').textContent = title;
+  setTitle(title);
   document.getElementById('titleText').value = title;
   document.getElementById('themeText').value = themes.join('\n');
   render();
@@ -191,11 +219,12 @@ function render(){
     card.onclick = () => openTheme(pos);
     const idx = order[pos] ?? pos;
     const bg = COLORS[pos % COLORS.length];
-    card.innerHTML = `<div class="icon">${ICONS[idx % ICONS.length]}</div><div class="num" style="--num-bg:${bg}">${String(pos+1).padStart(2,'0')}</div><div class="status">${used[pos]?'✅':''}</div>`;
+    card.innerHTML = `<div class="num" style="--num-bg:${bg}">${String(pos+1).padStart(2,'0')}</div>`;
     panel.appendChild(card);
   }
 }
 function openTheme(pos){
+  playOpenSound();
   currentPos = pos;
   used[pos] = true;
   persist(); render();
@@ -246,14 +275,14 @@ function saveSettings(){
   if(lines.length < 1){ alert('テーマを1つ以上入力してください。'); return; }
   title = newTitle;
   themes = lines.concat(DEFAULT_THEMES).slice(0,30);
-  document.getElementById('mainTitle').textContent = title;
+  setTitle(title);
   persist(); render(); alert('保存しました！');
 }
 function restoreDefault(){
   if(!confirm('タイトルとテーマを初期内容に戻します。よろしいですか？')) return;
   title = DEFAULT_TITLE;
   themes = DEFAULT_THEMES.slice();
-  document.getElementById('mainTitle').textContent = title;
+  setTitle(title);
   document.getElementById('titleText').value = title;
   document.getElementById('themeText').value = themes.join('\n');
   persist(); render();
